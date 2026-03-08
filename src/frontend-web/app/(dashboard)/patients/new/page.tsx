@@ -129,7 +129,7 @@ export default function AddPatientPage() {
       <div className="panel col-span-4 p-5 md:col-span-12 md:min-h-0 md:flex md:flex-col">
         <h2 className="text-xl">Pacientes Cadastrados</h2>
         <div className="no-scrollbar mt-4 overflow-x-auto overflow-y-auto md:min-h-0 md:flex-1">
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-left ">
             <thead>
               <tr className="border-b border-slate-200">
                 <th className="py-2">Nome Completo</th>

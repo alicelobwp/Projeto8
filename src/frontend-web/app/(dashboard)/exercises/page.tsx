@@ -144,20 +144,20 @@ export default function ExercisesPage() {
               className="relative rounded-md border border-slate-200 bg-slate-50 p-3 space-y-1"
             >
               <p className="font-semibold">{exercise.name}</p>
-              <p className="mt-1 text-xs uppercase tracking-wide text-dark-blue">
+              <p className="mt-1  uppercase tracking-wide text-dark-blue">
                 {exercise.tags}
               </p>
               <a
                 href={exercise.youtube}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-2 inline-block text-sm font-semibold text-dark-blue underline underline-offset-2"
+                className="mt-2 inline-block text-dark-blue underline underline-offset-2"
               >
                 Abrir video
               </a>
               <button
                 onClick={() => removeExercise(exercise.id)}
-                className="absolute right-3 bottom-4 rounded-md bg-light-salmon px-3 py-1 text-sm"
+                className="absolute right-3 bottom-4 rounded-md bg-light-salmon px-3 py-1 "
               >
                 Excluir
               </button>

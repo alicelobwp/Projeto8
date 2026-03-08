@@ -107,7 +107,7 @@ export function Sidebar({ expanded, onToggle }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center rounded-md text-sm font-semibold transition-all duration-300 ${
+              className={`flex items-center rounded-md  font-semibold transition-all duration-300 ${
                 expanded
                   ? "h-11 w-full gap-3 px-4"
                   : `${iconButtonSize} mx-auto justify-center`

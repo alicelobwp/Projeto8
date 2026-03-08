@@ -95,7 +95,7 @@ export const initialSchedule: Schedule[] = [
     id: "SCH-002",
     patientId: "PAT-003",
     exerciseName: "Respiracao costodiafragmatica",
-    frequency: "Diario",
+    frequency: "Diário",
     orientation: "8 minutos, foco em expiracao lenta.",
   },
 ];
