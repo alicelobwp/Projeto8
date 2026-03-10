@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-public class ExerciseController {
+public class AdminController {
 
     //Criar controller da maya aqui,
     // com login (email, password), tabela de Admin, criar novos admins
