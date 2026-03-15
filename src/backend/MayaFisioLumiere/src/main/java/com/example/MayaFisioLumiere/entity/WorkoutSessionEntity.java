@@ -23,6 +23,9 @@ public class WorkoutSessionEntity {
     @Column(nullable = false)
     private String weekDay;
 
+    @Column(nullable = false)
+    private int checked = 0;
+
     @ManyToOne
     @JoinColumn(name="patient_id",nullable = false)
     private PatientEntity patient;
