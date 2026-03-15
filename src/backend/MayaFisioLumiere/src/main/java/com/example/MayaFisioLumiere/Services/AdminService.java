@@ -17,6 +17,7 @@ import java.util.Optional;
 public class AdminService {
 
     //Criar novos perfis de Administradores, tanto da Maya quanto ela criar de outros profissionais
+    //Rota http://localhost:8081/api/adminAccess/create-admin
     @Autowired
     private AdminRepository adminRepository;
     public AdminEntity createAdmin(AdminRequestDTO data){
@@ -29,7 +30,7 @@ public class AdminService {
     }
 
     //Atualizar email, nome ou senha do administrador, procurando o admin pelo ID dele
-
+    //Rota
     public AdminResponseDTO updateAdmin(Long id, AdminRequestDTO data){
         AdminEntity admin = adminRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Perfil administrador não encontrado"));
@@ -84,7 +85,7 @@ public class AdminService {
     //Buscar por email
 
     public List<AdminResponseDTO> findByEmail(String adminEmail){
-        List<AdminEntity> admins = adminRepository.findByEmailContainingIgnoreCase(adminEmail);
+        List<AdminEntity> admins = adminRepository.findByAdminEmailContainingIgnoreCase(adminEmail);
 
         return admins.stream().map(admin ->
                 new AdminResponseDTO(
@@ -108,7 +109,7 @@ public class AdminService {
     //LOGIN do administrador ----TESTAR
 
     public AdminEntity loginAdmin(String adminEmail, String adminPassword){
-        Optional<AdminEntity> adminLogin = adminRepository.findByEmail(adminEmail);
+        Optional<AdminEntity> adminLogin = adminRepository.findByAdminEmail(adminEmail);
             if (adminLogin.isPresent()) {
                 AdminEntity admin = adminLogin.get();
                 if(admin.getAdminPassword().equals(adminPassword)){

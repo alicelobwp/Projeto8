@@ -31,16 +31,17 @@ public class AdminController {
     }
 
     //Atualizar email, nome ou senha
-    @PutMapping("/updateAdmin/{adminUser_ID}")
+    //http://localhost:8081/api/adminAccess/updateAdmin/2
+    @PutMapping("/updateAdmin/{id}")
     public ResponseEntity<AdminResponseDTO> updateAdmin(
-            @PathVariable Long adminUser_ID,
+            @PathVariable Long id,
             @RequestBody AdminRequestDTO data) {
-        AdminResponseDTO admin = adminService.updateAdmin(adminUser_ID, data);
+        AdminResponseDTO admin = adminService.updateAdmin(id, data);
         return ResponseEntity.ok(admin);
     }
 
     //Buscar todos os Administradores/Profissionais
-
+    //Rota http://localhost:8081/api/adminAccess/all/admins
     @GetMapping("/all/admins")
     public ResponseEntity<List<AdminResponseDTO>> getAdmins(@RequestParam(defaultValue = "0") int page,
                                                             @RequestParam(defaultValue = "10") int size) {
@@ -49,16 +50,16 @@ public class AdminController {
     }
 
     //Buscar Administradores/Profissionais por Id
-
-    @GetMapping("/ID/{adminUser_ID}")
+    //Rota http://localhost:8081/api/adminAccess/ID/2
+    @GetMapping("/ID/{id}")
     public ResponseEntity<AdminResponseDTO> searchById(
-            @PathVariable Long adminUser_ID) {
-        AdminResponseDTO admins = adminService.findById(adminUser_ID);
+            @PathVariable Long id) {
+        AdminResponseDTO admins = adminService.findById(id);
         return ResponseEntity.ok(admins);
     }
 
     //Buscar por email
-
+    //Rota http://localhost:8081/api/adminAccess/adminEmail/bot
     @GetMapping("/adminEmail/{adminEmail}")
     public ResponseEntity<List<AdminResponseDTO>> searchByEmail(
             @PathVariable String adminEmail) {
@@ -67,12 +68,10 @@ public class AdminController {
     }
 
     //Deletar administrador por id
-
-    @DeleteMapping("/deleteAdminId/{adminUser_ID}")
-    public ResponseEntity<String> deleteAdmin(@PathVariable Long adminUser_ID){
-        adminService.deleteAdminById(adminUser_ID);
+    //Rota http://localhost:8081/api/adminAccess/deleteAdminId/2
+    @DeleteMapping("/deleteAdminId/{id}")
+    public ResponseEntity<String> deleteAdmin(@PathVariable Long id){
+        adminService.deleteAdminById(id);
         return ResponseEntity.ok("Administrador deletado com sucesso");
     }
-
-    //LOGIN do administrador ----TESTAR
 }
