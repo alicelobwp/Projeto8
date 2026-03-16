@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class AdminEntity implements UserDetails { // reconhece que esse usuário vai ser autenticado dentro da aplicação spring
+public class AdminEntity implements UserDetails { // reconhece que esse usuário vai ser autenticado dentro da aplicação spring, se estiver dando erro é so implementar os metodos automaticamente
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminUser_ID;
@@ -37,7 +37,7 @@ public class AdminEntity implements UserDetails { // reconhece que esse usuário
     @Column(nullable = false)
     private String adminPassword;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // salva como admin dentro do banco de dados
     private UserRole role;
 
     // adicionar essas colunas dentro do banco de dados para expiração da sessão do admin
@@ -50,22 +50,6 @@ public class AdminEntity implements UserDetails { // reconhece que esse usuário
     @Column(name = "last_access_date")
     private LocalDate lastAccessDate = LocalDate.now();
 
-    //Getters para get no login e logout, creio que setters não são necessários porque setamos os valores no Service
-    public Long getAdminUser_ID() {
-        return adminUser_ID;
-    }
-
-    public String getAdminName() {
-        return adminName;
-    }
-
-    public String getAdminEmail() {
-        return adminEmail;
-    }
-
-    public String getAdminPassword() {
-        return adminPassword;
-    }
 
     // anotações geradas automaticamente ao implementarmos a classe de UserDetails
 
@@ -93,7 +77,7 @@ public class AdminEntity implements UserDetails { // reconhece que esse usuário
             return true;
         }
 
-        int limitMinutes = (this.role == UserRole.Admin) ? 540 : 180; //9h de sessão ou 3h de sessão, tem que ver quanto tempo a gentr pretende colocar para a sessão diaria do admin e do usuário
+        int limitMinutes = (this.role == UserRole.Admin) ? 540 : 180; //9h de sessão ou 3h de sessão, tem que ver quanto tempo a gente pretende colocar para a sessão diaria do admin e do usuário
         return this.totalMinutesUsedToday < limitMinutes;
     }
 
@@ -109,7 +93,7 @@ public class AdminEntity implements UserDetails { // reconhece que esse usuário
         return true;
     }
 
-    // credenciais não expiradas fazer a lógica de implementação ainda delas
+    // credenciais não expiradas fazer a lógica de implementação ainda delas, com base no jwt e hash
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
