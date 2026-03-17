@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
     private AdminService adminService;
 
-    @PostMapping("/registerAdmin")
-    public ResponseEntity<AdminEntity> create(@RequestBody AdminRequestDTO body){
-        AdminEntity newAdmin = this.adminService.createAdmin(body);
+    @PostMapping("/register/admin")
+    public ResponseEntity<AdminEntity> create(@RequestBody AdminRequestDTO body, String hashedPassword){
+        AdminEntity newAdmin = this.adminService.createAdmin(body, hashedPassword);
         return ResponseEntity.ok(newAdmin);
     }
-    @PostMapping("/admin/login")
+    @PostMapping("/login/admin")
     public AdminEntity login(@RequestBody AdminEntity admin){
 
         return adminService.loginAdmin(

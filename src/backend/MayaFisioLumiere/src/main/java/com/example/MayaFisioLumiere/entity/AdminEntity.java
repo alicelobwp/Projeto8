@@ -23,7 +23,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class AdminEntity implements UserDetails { // reconhece que esse usuário vai ser autenticado dentro da aplicação spring, se estiver dando erro é so implementar os metodos automaticamente
+public class AdminEntity implements UserDetails {
+    // reconhece que esse usuário vai ser autenticado dentro da aplicação spring,
+    // se estiver dando erro é so implementar os metodos automaticamente
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminUser_ID;

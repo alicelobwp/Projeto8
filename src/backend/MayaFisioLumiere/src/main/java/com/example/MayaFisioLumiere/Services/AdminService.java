@@ -8,11 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+//remover a password do admin da response, fazer a parte de terminar a autenticação por meio das entities que
 @Service
 public class AdminService {
 
@@ -20,11 +23,16 @@ public class AdminService {
     //Rota http://localhost:8081/api/adminAccess/create-admin
     @Autowired
     private AdminRepository adminRepository;
-    public AdminEntity createAdmin(AdminRequestDTO data){
+
+    @Autowired
+    private PasswordEncoder bcrypt;
+
+    public AdminEntity createAdmin(AdminRequestDTO data, String adminPassword){
         AdminEntity newAdmin = new AdminEntity();
         newAdmin.setAdminName(data.adminName());
         newAdmin.setAdminEmail(data.adminEmail());
-        newAdmin.setAdminPassword(data.adminPassword());
+        String hashedPassword = bcrypt.encode(adminPassword);
+        newAdmin.setAdminPassword(hashedPassword);
 
         return adminRepository.save(newAdmin);
     }
@@ -51,7 +59,7 @@ public class AdminService {
                 admin.getAdminUser_ID(),
                 admin.getAdminName(),
                 admin.getAdminEmail(),
-                admin.getAdminPassword()
+                admin.getAdminPassword() //retirar a password do admin da response
         );
         } catch (Exception err) {
             throw new RuntimeException("Erro ao atualizar dados do administrador", err);
