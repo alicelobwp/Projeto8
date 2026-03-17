@@ -34,9 +34,11 @@ public class PatientEntity {
     private String password;
 
     @Column(nullable = false)
-    private int patientAge;
+    private String birthDate; //DEPOO MUDAR REQUEST, RESPONSE, SERVICE DE CRIAÇÃO E DE GET
 
     @Column(nullable = false)
     private String status = "INATIVO";
+
+    //ADICIONAR numero zap, genero, altura, peso
 
 }

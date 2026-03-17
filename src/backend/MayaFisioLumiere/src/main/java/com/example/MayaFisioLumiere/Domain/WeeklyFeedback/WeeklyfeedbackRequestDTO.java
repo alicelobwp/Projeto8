@@ -1,4 +1,10 @@
 package com.example.MayaFisioLumiere.Domain.WeeklyFeedback;
 
-public record WeeklyfeedbackRequestDTO() {
+import java.util.UUID;
+
+public record WeeklyfeedbackRequestDTO(
+        UUID patient_id,
+        Long painLevel,
+        String comment
+) {
 }
