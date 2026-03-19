@@ -21,10 +21,7 @@ public class WeeklyFeedbackEntity {
     private Long registry_ID;
 
     @Column(nullable = false)
-    private Long painLevel;
-
-    @Column
-    private String comment;
+    private Boolean painLevel;
 
     //A data do feedback ficará registrada no banco, e a cada 7 dias será mandada a weekly.
     @Column
