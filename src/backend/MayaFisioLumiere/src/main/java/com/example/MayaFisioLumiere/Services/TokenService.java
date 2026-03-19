@@ -47,9 +47,25 @@ public class TokenService {
         }
     }
 
+    public Long getExpirationDate(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm)
+                    .withIssuer("auth-api")
+                    .build()
+                    .verify(token)
+                    .getExpiresAt() // Pega o objeto Date da expiração
+                    .getTime();    // Converte para milissegundos (Long)
+        } catch (JWTVerificationException exception) {
+            // Se o token já for inválido, retornamos o tempo atual para ele expirar logo
+            return System.currentTimeMillis();
+        }
+    }
+
     // o quanto de tempo a sessão desse usuario vai expirar
     private Instant genExpirationDate() {
         // vai expirar em 2h a partir da entrada da aplicação
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
+
 }
