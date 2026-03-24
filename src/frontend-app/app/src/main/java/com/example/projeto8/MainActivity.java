@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
@@ -19,10 +20,8 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener {
-
     private TextView monthYearText; // texto "Feb 2026"
     private RecyclerView calendarRecyclerView; // calendário (dias)
-
 
     private ImageView iconHome, iconExercise, iconProfile; // menu
 
@@ -32,6 +31,17 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main); // carrega o XML principal
+        RecyclerView recyclerView = findViewById(R.id.recyclerTasks);
+
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(new Task("Treino de perna"));
+        tasks.add(new Task("Cardio"));
+        tasks.add(new Task("Alongamento"));
+
+        TaskAdapter adapter = new TaskAdapter(tasks);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
 
         // LIGA OS ELEMENTOS DO XML COM O JAVA
         initWidgets();
@@ -63,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         iconHome = findViewById(R.id.iconHome);
         iconExercise = findViewById(R.id.iconExercise);
         iconProfile = findViewById(R.id.iconProfile);
+
     }
 
     // monta o calendário semanal
@@ -104,5 +115,6 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
             setWeekView();
         }
     }
+
 
 }
