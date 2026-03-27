@@ -32,14 +32,12 @@ export function usePatients() {
   const [patients, setPatients] = useState<PatientResponse[]>([]);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-  const token = process.env.NEXT_PUBLIC_TOKEN;
 
   const fetchPatients = useCallback(async () => {
     try {
       const res = await fetch(`${API_URL}/api/patient/getAllPatients`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -50,7 +48,7 @@ export function usePatients() {
     } catch (error) {
       console.error("Erro ao buscar pacientes:", error);
     }
-  }, [API_URL, token]);
+  }, [API_URL]);
 
   useEffect(() => {
     let isMounted = true;
@@ -60,7 +58,6 @@ export function usePatients() {
         const res = await fetch(`${API_URL}/api/patient/getAllPatients`, {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
@@ -75,14 +72,13 @@ export function usePatients() {
 
     load();
     return () => { isMounted = false; };
-  }, [API_URL, token]);
+  }, [API_URL]);
 
   const addPatient = async (newPatient: PatientRequest): Promise<boolean> => {
     try {
       const res = await fetch(`${API_URL}/api/patient/createPatient`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newPatient),
@@ -120,9 +116,6 @@ export function usePatients() {
     try {
       const res = await fetch(`${API_URL}/api/patient/delete/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
       if (res.ok) {
         setPatients((prev) => prev.filter((p) => p.patient_ID !== id));
