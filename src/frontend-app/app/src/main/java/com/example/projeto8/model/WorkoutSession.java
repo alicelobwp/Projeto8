@@ -10,6 +10,14 @@ public class WorkoutSession {
 
     private LocalDate workoutDate;
 
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    public LocalDate getWorkoutDate() {
+        return workoutDate;
+    }
+
     // ADICIONE ESTA LINHA:
     private Patient patient;
 
