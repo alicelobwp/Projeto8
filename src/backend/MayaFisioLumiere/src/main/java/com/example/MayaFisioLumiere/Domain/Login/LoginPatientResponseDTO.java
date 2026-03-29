@@ -1,8 +1,10 @@
 package com.example.MayaFisioLumiere.Domain.Login;
 
-public record LoginPatientRequestDTO(
+import java.util.UUID;
+
+public record LoginPatientResponseDTO(
+        UUID patient_id,
         String email,
-        String password,
         String name
 ) {
 }

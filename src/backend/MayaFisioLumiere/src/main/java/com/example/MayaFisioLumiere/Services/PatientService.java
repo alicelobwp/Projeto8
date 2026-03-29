@@ -102,6 +102,7 @@ public class PatientService {
         response.put("token", token);
         response.put("email", patient.getEmail());
         response.put("patient_id", patient.getPatient_ID());
+        response.put("name", patient.getName());
 
         return response;
     }
