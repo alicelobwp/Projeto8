@@ -54,7 +54,7 @@ public class PatientController {
         }
     }
 
-    @DeleteMapping("/delete/{patient_id}") // deletando paciente por email
+    @DeleteMapping("/delete/{patient_id}") // deletando paciente por id
     public ResponseEntity<?> deletePatient(@PathVariable("patient_id") UUID patiend_id) {
         try {
             patientRepository.deleteById(patiend_id);
