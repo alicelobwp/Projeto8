@@ -56,10 +56,24 @@ public class SecurityConfig {
                 .cors(org.springframework.security.config.Customizer.withDefaults()) // 2. Ativa o CORS
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        // 3. Use "api/patient/login" (sem a barra no início se o @RequestMapping já tiver)
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // 2. Libera os LOGINS (Sempre primeiro!)
                         .requestMatchers(HttpMethod.POST, "/api/patient/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login/**").permitAll()
-                        .requestMatchers("/api/patient/**").permitAll()
+
+                        // 3. Libera o erro interno do Spring (para você ver mensagens reais)
+                        .requestMatchers("/error").permitAll()
+
+                        // 4. Regras para Exercícios (você deixou aberto)
+                        .requestMatchers("/api/exercise/**").permitAll()
+
+                        // 5. BLOQUEIA o cadastro de pacientes para quem não é ADMIN
+                        // Aqui permitimos que apenas Admin acesse as outras rotas de /api/patient/
+                        .requestMatchers(HttpMethod.POST, "/api/patient").hasAnyRole("ADMIN", "ROLE_ADMIN")
+
+                        // 6. Qualquer outra coisa de paciente ou o resto do app precisa de login
+                        .requestMatchers("/api/patient/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
