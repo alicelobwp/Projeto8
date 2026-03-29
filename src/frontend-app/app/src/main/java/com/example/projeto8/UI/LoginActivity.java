@@ -54,16 +54,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void patientLogIn() {
-        String PatientEmail = Email.getText().toString().trim();
-        String PatientSenha = Password.getText().toString().trim();
+        String email = Email.getText().toString().trim();
+        String password = Password.getText().toString().trim();
 
         //Validar se o paciente preencheu os campos
-        if (PatientEmail.isEmpty() || PatientSenha.isEmpty()){
+        if (email.isEmpty() || password.isEmpty()){
             Toast.makeText(this,"Preencha todos os campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        PatientLoginRequestDTO loginInfo = new PatientLoginRequestDTO(PatientEmail, PatientSenha);
+        PatientLoginRequestDTO loginInfo = new PatientLoginRequestDTO(email, password);
         PatientService service = RetrofitClient.getPatientService();
 
         service.login(loginInfo).enqueue(new Callback<PatientLoginResponseDTO>() {
