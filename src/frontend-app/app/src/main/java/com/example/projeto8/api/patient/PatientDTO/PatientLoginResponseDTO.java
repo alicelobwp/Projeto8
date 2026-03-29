@@ -9,4 +9,8 @@ public class PatientLoginResponseDTO {
     public Long getId() { return id; }
     public String getName() { return name; }
     public String getEmail() { return email; }
+
+    private String token;
+
+    public String getToken() { return token; }
 }

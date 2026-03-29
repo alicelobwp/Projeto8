@@ -1,9 +1,13 @@
 package com.example.projeto8.remote;
 
+import android.content.Context;
+
 import com.example.projeto8.api.exerciseSession.ExerciseSessionService;
 import com.example.projeto8.api.patient.PatientService;
 import com.example.projeto8.api.workout.WorkoutService;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -25,17 +29,40 @@ public class RetrofitClient {
     */
         private static final String BASE_URL = "https://projeto8.onrender.com";
         private static Retrofit retrofit = null;
+        private static Context appContext;
+
+        public static void init(Context context) {
+            appContext = context.getApplicationContext();
+        }
 
         // Dessa forma, é necessário criar o retrofit builder só uma vez invés de para cada rota!!
         private static Retrofit getRetrofitInstance() {
             if (retrofit == null) {
+                if (appContext == null) {
+                    throw new RuntimeException("RetrofitClient deve ser inicializado com init(context) antes do uso.");
+                }
+
+                OkHttpClient client = new OkHttpClient.Builder().addInterceptor(chain -> {
+                    // Agora usamos o appContext que guardamos
+                    String token = appContext.getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
+                            .getString("token", "");
+
+                    Request newRequest = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token)
+                            .build();
+                    return chain.proceed(newRequest);
+                }).build();
+
                 retrofit = new Retrofit.Builder()
                         .baseUrl(BASE_URL)
+                        .client(client)
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
             }
             return retrofit;
         }
+
+
 
         //Interfaces
         public static WorkoutService getWorkoutService() {

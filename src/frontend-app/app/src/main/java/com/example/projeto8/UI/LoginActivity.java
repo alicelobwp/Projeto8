@@ -26,23 +26,30 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     EditText Email;
     EditText Password;
+    TextView forgotPassword;
+
+    TextView mensagePassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        RetrofitClient.init(this);
         EdgeToEdge.enable(this);
         setContentView(R.layout.login_activity);
 
          Email = findViewById(R.id.Email);
          Password = findViewById(R.id.Password);
-
-        TextView forgotPassword = findViewById(R.id.forgotPassword);
-        TextView mensagePassword = findViewById(R.id.mensagePassword);
+         forgotPassword = findViewById(R.id.forgotPassword);
+         mensagePassword = findViewById(R.id.mensagePassword);
         btnLogin = findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(v -> {
             patientLogIn();
+        });
+
+        forgotPassword.setOnClickListener( v -> {
+            forgotPatientPassword();
         });
     }
 
@@ -62,17 +69,34 @@ public class LoginActivity extends AppCompatActivity {
         service.login(loginInfo).enqueue(new Callback<PatientLoginResponseDTO>() {
             @Override
             public void onResponse(Call<PatientLoginResponseDTO> call, Response<PatientLoginResponseDTO> response) {
-                if (response.isSuccessful() & response.body() != null){
+                if (response.isSuccessful() && response.body() != null){
+                    String tokenGerado = response.body().getToken();
+                    getSharedPreferences("STORAGE", MODE_PRIVATE)
+                            .edit()
+                            .putString("token", tokenGerado)
+                            .apply();
+
                     Toast.makeText(LoginActivity.this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    if (response.code() == 401) {
+                   /* if (response.code() == 401) {
                         Toast.makeText(LoginActivity.this, "E-mail ou senha incorretos.", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(LoginActivity.this, "Erro no servidor: " + response.code(), Toast.LENGTH_SHORT).show();
-                    }
+                        Toast.makeText(LoginActivity.this, "Erro no servidor: " + response.message(), Toast.LENGTH_SHORT).show();
+                    } */
+                        // Tenta ler o corpo do erro para saber o motivo real do 403
+                        try {
+                            String errorBody = response.errorBody().string();
+                            Log.e("API_DEBUG", "Corpo do erro: " + errorBody);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if (response.code() == 403) {
+                            Toast.makeText(LoginActivity.this, "Acesso Negado (403). Verifique as permissões do servidor.", Toast.LENGTH_LONG).show();
+                        }
                 }
             }
 
@@ -82,20 +106,11 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Não foi possível conectar ao servidor.", Toast.LENGTH_LONG).show();
             }
         });
-
-
-
     }
 
-
-
-
-
-
-        /*
-            Fazer a logica function de forgot password!!!
-        forgotPassword.setOnClickListener(v -> {
-            mensagePassword.setVisibility(View.VISIBLE);
-        }); */
+    public void forgotPatientPassword() {
+        mensagePassword.setVisibility(View.VISIBLE);
     }
+
+}
 
