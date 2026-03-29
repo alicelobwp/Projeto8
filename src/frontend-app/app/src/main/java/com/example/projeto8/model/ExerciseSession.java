@@ -1,26 +1,35 @@
 
 package com.example.projeto8.model;
 
+import com.example.projeto8.api.exerciseSession.ExerciseSessionDTO.ExerciseResponseDTO;
 import com.example.projeto8.model.Exercise;
 import com.google.gson.annotations.SerializedName;
 
 public class ExerciseSession {
 
-    // O @SerializedName garante que o Android entenda se o Back enviar "name"
-    @SerializedName("name")
-    private String name; //nao seria melhor pegar pelo exercise ID dentro da exercise session?
-
-
+    @SerializedName("exercisesession_id")
     private Long exercisesession_id;
+
+    @SerializedName("exercise_id")
+    private Long exerciseId;
+
+    @SerializedName("name") // Se o back enviar o nome
+    private String name;
+    private ExerciseResponseDTO exercise;
     private int serie;
     private int repetitions;
-    private Boolean feelPain;
-    private WorkoutSession workoutSession;
-    private Patient patient;
-    private Exercise exercise;
+    private boolean feelPain;
+
+
+    // O @SerializedName garante que o Android entenda se o Back enviar "name"
 
     public Long getExercisesession_id() {
         return exercisesession_id;
+    }
+
+
+    public ExerciseResponseDTO getExercise() {
+        return exercise;
     }
 
     public int getSerie() {
@@ -37,18 +46,6 @@ public class ExerciseSession {
 
     public void setFeelPain(Boolean feelPain) {
         this.feelPain = feelPain;
-    }
-
-    public WorkoutSession getWorkoutSession() {
-        return workoutSession;
-    }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public Exercise getExercise() {
-        return exercise;
     }
 
     // Construtor vazio (necessário para o Retrofit)
