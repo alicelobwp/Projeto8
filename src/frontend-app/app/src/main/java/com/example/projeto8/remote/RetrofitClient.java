@@ -41,23 +41,27 @@ public class RetrofitClient {
             if (appContext == null) {
                 throw new RuntimeException("RetrofitClient deve ser inicializado com init(context) antes do uso.");
             }
-
-            // 1. INTERCEPTOR DE LOG (Para ver o erro no Logcat)
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-            // 2. CONFIGURAÇÃO DO CLIENTE OKHTTP
             OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(logging) // Adiciona o Log primeiro
+                    .addInterceptor(logging)
                     .addInterceptor(chain -> {
-                        // 3. INTERCEPTOR DE TOKEN (Seu código original)
-                        String token = appContext.getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
-                                .getString("token", "");
+                        Request originalRequest = chain.request();
+                        Request.Builder builder = originalRequest.newBuilder();
 
-                        Request.Builder builder = chain.request().newBuilder();
-                        if (token != null && !token.isEmpty()) {
-                            builder.addHeader("Authorization", "Bearer " + token);
+                        // LÓGICA: Se NÃO for login, tenta adicionar o token
+                        String path = originalRequest.url().encodedPath();
+                        if (!path.contains("/api/patient/login") && !path.contains("/api/auth/login")) {
+
+                            String token = appContext.getSharedPreferences("STORAGE", Context.MODE_PRIVATE)
+                                    .getString("token", "");
+
+                            if (token != null && !token.isEmpty()) {
+                                builder.addHeader("Authorization", "Bearer " + token);
+                            }
                         }
+
                         return chain.proceed(builder.build());
                     })
                     .build();

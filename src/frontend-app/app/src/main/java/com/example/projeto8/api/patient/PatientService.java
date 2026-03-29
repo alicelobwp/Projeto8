@@ -9,6 +9,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -23,7 +24,15 @@ public interface PatientService {
     );
 
     //Login do patient
+    @Headers({
+            "User-Agent: Mozilla/5.0",
+            "Content-Type: application/json"
+    })
     @POST("api/patient/login")
     Call<PatientLoginResponseDTO> login(@Body PatientLoginRequestDTO data);
+
+    //LOGIN PARA USO DURANTE TESTES E DEVELOPMENT:
+    //analice.coimbra@lumiere.com
+    // 2004-07-14
 
 }
