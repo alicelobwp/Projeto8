@@ -5,6 +5,7 @@ import com.example.MayaFisioLumiere.Domain.Patient.PatientResponseDTO;
 import com.example.MayaFisioLumiere.entity.PatientEntity;
 import com.example.MayaFisioLumiere.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class PatientService {
 
     @Autowired
     private TokenService tokenService;
+
 
     //busca todos os pacientes criados dentro do banco de dados
     public List<PatientResponseDTO> getAllPatients() {
@@ -74,6 +76,8 @@ public class PatientService {
         newPatient.setHeight(data.height());
         newPatient.setWeight(data.weight());
         newPatient.setPatientAge(data.patientAge());
+
+        newPatient.setPassword(data.birthDate());
 
         return patientRepository.save(newPatient);
     }
