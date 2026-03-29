@@ -13,4 +13,7 @@ public interface WorkoutService {
     // a de exercícios pelo ID do paciente
     @GET("api/workout/patient/{patient_id}")
     Call<List<WorkoutSession>> getWorkoutsByPatient(@Path("patient_id") String patientId);
+
+
+
 }
