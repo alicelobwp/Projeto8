@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useMemo, useState } from "react";
@@ -6,9 +7,14 @@ import { initialSchedule } from "@/app/lib/mock-data";
 import { usePatients } from "@/app/hooks/useGetPatients";
 import { useExercises, Exercise } from "@/app/hooks/useGetExercises";
 
-
 const daysOfWeek = [
-  "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo",
+  "Segunda",
+  "Terça",
+  "Quarta",
+  "Quinta",
+  "Sexta",
+  "Sábado",
+  "Domingo",
 ];
 
 type WorkoutSession = {
@@ -29,6 +35,8 @@ export default function PatientsPage() {
   const { patients, removePatient } = usePatients();
   const { exercises } = useExercises();
 
+  console.log("DADOS REAIS DOS PACIENTES:", patients);
+
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState("");
   const [schedules, setSchedules] = useState(initialSchedule);
@@ -38,7 +46,9 @@ export default function PatientsPage() {
   });
 
   const [workoutSessions, setWorkoutSessions] = useState<WorkoutSession[]>([]);
-  const [exerciseSessions, setExerciseSessions] = useState<ExerciseSession[]>([]);
+  const [exerciseSessions, setExerciseSessions] = useState<ExerciseSession[]>(
+    [],
+  );
   const [selectedDay, setSelectedDay] = useState<string>(daysOfWeek[0]);
 
   const filteredPatients = useMemo(() => {
@@ -49,15 +59,29 @@ export default function PatientsPage() {
   }, [patients, query]);
 
   const selectedPatient =
-    patients.find((p) => p.patient_ID === selectedId) ?? filteredPatients[0];
+    patients.find(
+      (p) =>
+        String((p as any).patient_id || p.patient_ID) === String(selectedId),
+    ) ?? filteredPatients[0];
 
   function deletePatient(id: string) {
     removePatient(id);
-    setSchedules((prev) => prev.filter((item) => item.patientId !== id));
-    if (selectedId === id) {
-      const next = patients.find((p) => p.patient_ID !== id);
-      setSelectedId(next?.patient_ID ?? "");
+    setSchedules((prev) =>
+      prev.filter((item) => String(item.patientId) !== String(id)),
+    );
+    if (String(selectedId) === String(id)) {
+      const next = patients.find(
+        (p) => String((p as any).patient_id || p.patient_ID) !== String(id),
+      );
+      setSelectedId(
+        next ? String((next as any).patient_id || next.patient_ID) : "",
+      );
     }
+  }
+
+  function handleSelectPatient(id: string) {
+    console.log("ID clicado:", id);
+    setSelectedId(String(id));
   }
 
   function submitSchedule(event: React.FormEvent<HTMLFormElement>) {
@@ -66,14 +90,14 @@ export default function PatientsPage() {
 
     const newWorkoutSession: WorkoutSession = {
       workoutSession_ID: `WS-${Date.now()}`,
-      patient_ID: selectedPatient.patient_ID,
+      patient_ID: String(selectedPatient.patient_ID),
       weekDay: selectedDay,
     };
 
     const newExerciseSession: ExerciseSession = {
       exerciseSession_ID: `ES-${Date.now()}`,
       workoutSession_ID: newWorkoutSession.workoutSession_ID,
-      patient_ID: selectedPatient.patient_ID,
+      patient_ID: String(selectedPatient.patient_ID),
       exercise_ID: scheduleForm.exerciseName,
       serie: scheduleForm.frequency,
     };
@@ -103,37 +127,48 @@ export default function PatientsPage() {
           />
         </div>
 
-        <div className="mt-4 overflow-x-auto max-h-68 no-scrollbar">
+        <div className="mt-4 overflow-x-auto max-h-68 no-scrollbar rounded-lg border border-black/10 p-4">
           <table className="w-full text-left">
-            <thead>
-              <tr className="border-b border-neutral-200">
-                <th className="py-2">Paciente</th>
-              </tr>
-            </thead>
             <tbody>
-              {filteredPatients.map((patient) => (
-                <tr
-                  key={patient.patient_ID}
-                  className="flex justify-between border-b border-slate-100"
-                >
-                  <td className="py-3">
-                    <button
-                      onClick={() => setSelectedId(patient.patient_ID)}
-                      className="hover:opacity-70 focus:font-bold transition duration-300 ease-in-out"
-                    >
-                      {patient.name} {patient.surname}
-                    </button>
-                  </td>
-                  <td className="py-3">
-                    <button
-                      onClick={() => deletePatient(patient.patient_ID)}
-                      className="rounded-md bg-neutral-200 px-3 py-1 hover:opacity-70 transition duration-300 ease-in-out text-red-600"
-                    >
-                      Excluir
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {filteredPatients.map((patient, index) => {
+                const isSelected =
+                  String(patient.patient_ID) ===
+                  String(selectedPatient?.patient_ID);
+
+                return (
+                  <tr
+                    key={`${index}-${patient.patient_ID}`}
+                    className={`flex justify-between items-center rounded-lg border-b border-slate-100 ${isSelected && "bg-blue-50"}`}
+                  >
+                    <td className="py-3 px-4">
+                      <button
+                        onClick={() =>
+                          handleSelectPatient(
+                            (patient as any).patient_id || patient.patient_ID,
+                          )
+                        }
+                        className={`transition duration-300 ease-in-out text-left ${
+                          isSelected && "text-blue"
+                        }`}
+                      >
+                        {patient.name} {patient.surname}
+                      </button>
+                    </td>
+                    <td className="py-3 px-2">
+                      <button
+                        onClick={() =>
+                          deletePatient(
+                            (patient as any).patient_id || patient.patient_ID,
+                          )
+                        }
+                        className="rounded-md bg-neutral-50 border border-neutral-100 px-3 py-1 hover:bg-red-600 hover:text-white transition duration-300 ease-in-out text-red-600"
+                      >
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -189,9 +224,6 @@ export default function PatientsPage() {
                 {selectedPatient.status}
               </span>
             </p>
-            <button className="rounded-md bg-blue px-4 py-2 text-neutral w-full hover:opacity-70 transition duration-300 ease-in-out mt-3">
-              Acessar prontuário completo
-            </button>
           </div>
         ) : (
           <p className="mt-3 text-neutral-500">
@@ -266,7 +298,10 @@ export default function PatientsPage() {
                 ws.weekDay === selectedDay,
             )
             .map((workoutSession) => (
-              <div key={workoutSession.workoutSession_ID} className="col-span-4">
+              <div
+                key={workoutSession.workoutSession_ID}
+                className="col-span-4"
+              >
                 {exerciseSessions
                   .filter(
                     (es) =>
