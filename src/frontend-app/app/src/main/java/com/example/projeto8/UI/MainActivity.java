@@ -167,9 +167,29 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         if (date != null) {
             CalendarUtils.selectedDate = date;
             setWeekView();
+
+            SharedPreferences prefs = getSharedPreferences("STORAGE", MODE_PRIVATE);
+            String id = prefs.getString("patient_id", null);
+
+            if (id != null) {
+                WorkoutSeshData(id);
+            }
         }
     }
 
+    //Para associar o dia do exercicio com o dia da semana
+    private String getDiaSemanaAbreviado(int diaSemana) {
+        switch (diaSemana) {
+            case 1: return "SEG";
+            case 2: return "TER";
+            case 3: return "QUA";
+            case 4: return "QUI";
+            case 5: return "SEX";
+            case 6: return "SAB";
+            case 7: return "DOM";
+            default: return "";
+        }
+    }
 
     //Mostrar a Workout do dia
     private void WorkoutSeshData(String patientId) {
@@ -191,39 +211,54 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
                             try {
                                 tasksParaExibir.clear();
 
+                                int diaSemana = CalendarUtils.selectedDate.getDayOfWeek().getValue();
+                                String diaAtual = getDiaSemanaAbreviado(diaSemana);
+
                                 for (WorkoutSession treino : listaDeTreinos) {
-                                    if (treino.getExercises() != null) {
-                                        for (ExerciseSession session : treino.getExercises()) {
 
-                                            int serie = session.getSerie();
-                                            int reps = session.getRepetitions();
+                                    if (treino.getWeekDay() != null &&
+                                            treino.getWeekDay().trim().toUpperCase().equals(diaAtual)) {
 
-                                            String titulo = "Exercício s/ nome";
-                                            Long exercise_id = -1L;
-                                            String midiaURL = "";
-                                            String description = "";
+                                        if (treino.getExercises() != null) {
+                                            for (ExerciseSession session : treino.getExercises()) {
 
-                                            if (session.getExercise() != null) {
-                                                if (session.getExercise().getTitle() != null) titulo = session.getExercise().getTitle();
-                                                if (session.getExercise().getExercise_id() != null) exercise_id = session.getExercise().getExercise_id();
-                                                if (session.getExercise().getMidiaURL() != null) midiaURL = session.getExercise().getMidiaURL();
-                                                if (session.getExercise().getDescription() != null) description = session.getExercise().getDescription();
+                                                int serie = session.getSerie();
+                                                int reps = session.getRepetitions();
+
+                                                String titulo = "Exercício s/ nome";
+                                                Long exercise_id = -1L;
+                                                String midiaURL = "";
+                                                String description = "";
+
+                                                if (session.getExercise() != null) {
+                                                    if (session.getExercise().getTitle() != null)
+                                                        titulo = session.getExercise().getTitle();
+                                                    if (session.getExercise().getExercise_id() != null)
+                                                        exercise_id = session.getExercise().getExercise_id();
+                                                    if (session.getExercise().getMidiaURL() != null)
+                                                        midiaURL = session.getExercise().getMidiaURL();
+                                                    if (session.getExercise().getDescription() != null)
+                                                        description = session.getExercise().getDescription();
+                                                }
+
+                                                tasksParaExibir.add(new Task(exercise_id, titulo, serie, reps, midiaURL, description));
                                             }
-
-                                            tasksParaExibir.add(new Task(exercise_id, titulo, serie, reps, midiaURL, description));
                                         }
                                     }
                                 }
 
                                 if (tasksParaExibir.isEmpty()) {
-                                    tasksParaExibir.add(new Task(-1L, "Nenhum exercício para hoje", 0, 0, "", ""));                                }
-
+                                    tasksParaExibir.add(
+                                            new Task(-1L, "Nenhum exercício para hoje! Descanse.", 0, 0, "", "")
+                                    );
+                                }
                                 adapter.notifyDataSetChanged();
                                 Log.d("TESTE_API", "Exercícios carregados: " + tasksParaExibir.size());
 
                             } catch (Exception e) {
                                 Log.e("TESTE_API", "Erro ao atualizar interface: " + e.getMessage());
                             }
+
                         }
                     });
                 }
