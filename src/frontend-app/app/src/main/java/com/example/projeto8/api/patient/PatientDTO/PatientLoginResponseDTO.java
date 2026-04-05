@@ -26,5 +26,7 @@ public class PatientLoginResponseDTO {
     public String getEmail() { return email; }
     public String getToken() { return token; }
 
-    public boolean isLgpdAccepted() { return lgpdCheck; }
+    public boolean isLgpdCheck() {
+        return  lgpdCheck;
+    }
 }

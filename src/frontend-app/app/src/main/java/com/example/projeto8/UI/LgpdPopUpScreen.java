@@ -31,24 +31,23 @@ public class LgpdPopUpScreen extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.layout_lgpd_bottom_sheet, container, false);
 
         Button btnAccept = view.findViewById(R.id.btn_accept_lgpd);
-       // Button btnDecline = view.findViewById(R.id.btn_decline_lgpd);
+        Button btnDecline = view.findViewById(R.id.btn_decline_lgpd);
 
         btnAccept.setOnClickListener(v -> {
             updateLgpdOnServer();
         });
 
-     /*   btnDecline.setOnClickListener(v -> {
+      btnDecline.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Consentimento necessário.", Toast.LENGTH_SHORT).show();
 
-            // Redireciona para a SplashActivity (sua Load Screen com a Maya)
-            Intent intent = new Intent(getActivity(), SplashActivity.class);
+            Intent intent = new Intent(getActivity(), LoadScreen.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
 
             dismiss();
             if (getActivity() != null) getActivity().finish();
         });
-*/
+
         return view;
     }
 

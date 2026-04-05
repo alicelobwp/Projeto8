@@ -82,13 +82,14 @@ public class LoginActivity extends AppCompatActivity {
                             .putString("token", tokenGerado)
                             .putString("patient_id", patientID)
                             .putString("patient_name", patientName)
+                            .putBoolean("lgpd_check", response.body().isLgpdCheck()) // Adicione esta linha
                             .apply();
 
                     Log.d("JSON_REAL", new com.google.gson.Gson().toJson(response.body())); //Log para ver o que está retornando no login
                     Toast.makeText(LoginActivity.this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show();
 
                     // verificação para ver se o botão de lgpd já foi acessado pela conta
-                    if (!response.body().isLgpdAccepted()) {
+                    if (!response.body().isLgpdCheck()) {
                         LgpdPopUpScreen lgpdSheet = new LgpdPopUpScreen();
                         lgpdSheet.setCancelable(false);
                         lgpdSheet.show(getSupportFragmentManager(), "LGPD_CHECK");
