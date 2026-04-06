@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projeto8">
 
-        <activity android:name=".UI.LgpdPopUpScreen"/>
         <activity android:name=".UI.ExercisesActivity"/>
         <activity android:name=".UI.LoginActivity"/>
         <activity android:name=".UI.MainActivity"/>
