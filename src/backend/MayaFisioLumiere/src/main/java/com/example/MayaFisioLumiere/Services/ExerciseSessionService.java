@@ -3,14 +3,14 @@ package com.example.MayaFisioLumiere.Services;
 import com.example.MayaFisioLumiere.Domain.ExerciseSession.ExerciseSessionRequestDTO;
 import com.example.MayaFisioLumiere.Domain.ExerciseSession.ExerciseSessionResponseDTO;
 import com.example.MayaFisioLumiere.Domain.Exercises.ExerciseResponseDTO;
-import com.example.MayaFisioLumiere.entity.ExerciseEntity;
-import com.example.MayaFisioLumiere.entity.ExerciseSessionEntity;
-import com.example.MayaFisioLumiere.entity.PatientEntity;
-import com.example.MayaFisioLumiere.entity.WorkoutSessionEntity;
-import com.example.MayaFisioLumiere.repository.ExerciseSessionRepository;
-import com.example.MayaFisioLumiere.repository.ExercisesRepository;
-import com.example.MayaFisioLumiere.repository.PatientRepository;
-import com.example.MayaFisioLumiere.repository.WorkoutSessionRepository;
+import com.example.MayaFisioLumiere.Entity.ExerciseEntity;
+import com.example.MayaFisioLumiere.Entity.ExerciseSessionEntity;
+import com.example.MayaFisioLumiere.Entity.PatientEntity;
+import com.example.MayaFisioLumiere.Entity.WorkoutSessionEntity;
+import com.example.MayaFisioLumiere.Repository.ExerciseSessionRepository;
+import com.example.MayaFisioLumiere.Repository.ExercisesRepository;
+import com.example.MayaFisioLumiere.Repository.PatientRepository;
+import com.example.MayaFisioLumiere.Repository.WorkoutSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,25 +30,24 @@ public class ExerciseSessionService {
     private  WorkoutSessionRepository workoutSessionRepository;
 
     public List<ExerciseSessionResponseDTO> getAllExerciseSessions() {
-        return exerciseSessionRepository.findAll().stream().map(entity -> {
-            ExerciseResponseDTO exerciseDTO = (entity.getExercise() != null) ? new ExerciseResponseDTO(
-                    entity.getExercise().getExercise_ID(),
-                    entity.getExercise().getTitle(),
-                    entity.getExercise().getMidiaURL(),
-                    entity.getExercise().getTags(),
-                    entity.getExercise().getDescription()
-            ) : null;
+        List<ExerciseSessionEntity> sessions = exerciseSessionRepository.findAll();
 
-            return new ExerciseSessionResponseDTO(
-                    entity.getExercisesession_id() != null ? Math.toIntExact(entity.getExercisesession_id()) : 0,
-                    exerciseDTO,
-                    (entity.getWorkoutSession() != null) ? entity.getWorkoutSession().getWorkoutSession_id() : null,
-                    (entity.getPatient() != null) ? entity.getPatient().getPatient_ID() : null,
-                    entity.getSerie(),
-                    entity.getRepetitions(),
-                    entity.getFeelPain()
-            );
-        }).toList();
+        return sessions.stream().map(entity -> new ExerciseSessionResponseDTO(
+                        Math.toIntExact(entity.getExercisesession_id()),
+                        new ExerciseResponseDTO( // Criando o DTO do exercício com os dados da Entity, para retornar os dados deles
+                                entity.getExercise().getExercise_ID(),
+                                entity.getExercise().getTitle(),
+                                entity.getExercise().getMidiaURL(),
+                                entity.getExercise().getTags(),
+                                entity.getExercise().getDescription()
+                        ).exercise_id(),
+                        entity.getWorkoutSession().getWorkoutSession_id(),
+                        entity.getPatient().getPatient_ID(),
+                        entity.getSerie(),
+                        entity.getRepetitions(),
+                        entity.getFeelPain()
+                )
+        ).toList();
     }
 
 
@@ -120,14 +119,14 @@ public class ExerciseSessionService {
 
 
     public void deleteExerciseSession(Long exercisession_id) {
-         try {
+        try {
             if(!exerciseSessionRepository.existsById(exercisession_id)){
                 throw new RuntimeException("Sessão de Exercicios não encontrada");
             }
-             exerciseSessionRepository.deleteById(exercisession_id);
-         }catch (Exception err) {
+            exerciseSessionRepository.deleteById(exercisession_id);
+        }catch (Exception err) {
             throw new RuntimeException("Erro ao deletar Sessão de Exercícios", err);
-            }
-}
+        }
+    }
 
 }
