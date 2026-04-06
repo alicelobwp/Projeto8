@@ -68,6 +68,10 @@ public class PatientEntity implements UserDetails {
     @Column
     private Double weight;
 
+    @Column
+    private String description;
+
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 

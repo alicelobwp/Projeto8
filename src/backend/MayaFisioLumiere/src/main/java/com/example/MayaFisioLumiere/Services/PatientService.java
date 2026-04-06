@@ -40,7 +40,8 @@ public class PatientService {
                         patient.getGender(),
                         patient.getHeight(),
                         patient.getWeight(),
-                        patient.isLgpdCheck()
+                        patient.isLgpdCheck(),
+                        patient.getDescription()
                 ))
                 .toList();
     }
@@ -62,7 +63,8 @@ public class PatientService {
                 patient.getGender(),
                 patient.getHeight(),
                 patient.getWeight(),
-                patient.isLgpdCheck()
+                patient.isLgpdCheck(),
+                patient.getDescription()
         )).toList();
     }
     //cria novo paciente dentro do banco de dados
@@ -83,6 +85,7 @@ public class PatientService {
         newPatient.setTotalMinutesUsedToday(0);
         newPatient.setLastAccessDate(java.time.LocalDate.now());
         newPatient.setPassword(data.birthDate());
+        newPatient.setDescription(data.description());
 
         return patientRepository.save(newPatient);
     }
@@ -123,6 +126,7 @@ public class PatientService {
         if (body.gender() != null) patient.setGender(body.gender());
         if (body.height() != null) patient.setHeight(body.height());
         if (body.weight() != null) patient.setWeight(body.weight());
+        if(body.description() != null) patient.setDescription(body.description());
 
         patientRepository.save(patient);
 
@@ -138,7 +142,8 @@ public class PatientService {
                 patient.getGender(),
                 patient.getHeight(),
                 patient.getWeight(),
-                patient.isLgpdCheck()
+                patient.isLgpdCheck(),
+                patient.getDescription()
         );
     }
 
