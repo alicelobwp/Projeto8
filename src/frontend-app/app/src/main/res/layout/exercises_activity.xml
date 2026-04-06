@@ -10,7 +10,18 @@
     android:padding="30dp"
     android:background="@color/white"
     tools:context=".UI.ExercisesActivity">
-    
+
+    <View
+        android:id="@+id/topBackground"
+        android:layout_width="490dp"
+        android:layout_height="900dp"
+        android:background="@drawable/background5"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@id/contentLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textExercise"
@@ -23,7 +34,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"/>
 
     <ImageView
         android:id="@+id/imgExercise"
@@ -53,11 +65,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Você sentiu dor fazendo esse exercício?"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@color/paleBeige"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtDescription"
+        app:layout_constraintBottom_toTopOf="@id/btnPain"
         />
 
 
@@ -72,19 +85,20 @@
         android:backgroundTint="@color/choc"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtDor"
+        app:layout_constraintBottom_toTopOf="@+id/btnNext"
         />
 
     <Button
         android:id="@+id/btnNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="15dp"
         android:backgroundTint="@color/tangerine"
         android:text="Próximo"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnPain" />
+        app:layout_constraintBottom_toTopOf="@+id/menu"
+        />
 
     <include
         layout="@layout/menu"
