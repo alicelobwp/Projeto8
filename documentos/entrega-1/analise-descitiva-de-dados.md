@@ -65,3 +65,6 @@ Média: =MED(INICIO:FIM)
 Percentil: =PERCENTIL.INC(INICIO:FIM; PERCENTIL(º))
 ```
 <br/>
+
+## Gráficos
+[Clique aqui para ver os gráficos](https://drive.google.com/drive/folders/1YaKUmhMEIUiZM7HZeyodo4zL32b6yvCb)
