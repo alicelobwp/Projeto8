@@ -78,8 +78,6 @@ public class ExerciseSessionController {
         }
     }
 
-
-
     @DeleteMapping("/deleteExerciseSession/{exerciseSession_id}")
     public ResponseEntity<?> deleteExerciseSession(
         @PathVariable Long exerciseSession_id) {

@@ -34,13 +34,13 @@ public class ExerciseSessionService {
 
         return sessions.stream().map(entity -> new ExerciseSessionResponseDTO(
                         Math.toIntExact(entity.getExercisesession_id()),
-                        new ExerciseResponseDTO( // Criando o DTO do exercício com os dados da Entity, para retornar os dados deles
-                                entity.getExercise().getExercise_ID(),
-                                entity.getExercise().getTitle(),
-                                entity.getExercise().getMidiaURL(),
-                                entity.getExercise().getTags(),
-                                entity.getExercise().getDescription()
-                        ).exercise_id(),
+                new ExerciseResponseDTO( // Criando o DTO do exercício com os dados da Entity, para retornar os dados deles
+                        entity.getExercise().getExercise_ID(),
+                        entity.getExercise().getTitle(),
+                        entity.getExercise().getMidiaURL(),
+                        entity.getExercise().getTags(),
+                        entity.getExercise().getDescription()
+                ),
                         entity.getWorkoutSession().getWorkoutSession_id(),
                         entity.getPatient().getPatient_ID(),
                         entity.getSerie(),
