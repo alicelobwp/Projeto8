@@ -40,7 +40,7 @@ public class ExerciseSessionService {
                         entity.getExercise().getMidiaURL(),
                         entity.getExercise().getTags(),
                         entity.getExercise().getDescription()
-                ).exercise_id(),
+                ),
                 entity.getWorkoutSession().getWorkoutSession_id(),
                 entity.getPatient().getPatient_ID(),
                 entity.getSerie(),
