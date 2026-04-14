@@ -26,35 +26,35 @@ public class ExerciseSessionController {
     private ExerciseSessionService exerciseSessionService;
 
     @GetMapping("/getAllExerciseSessions")
-    public ResponseEntity<?> getAllExerciseSessions(){
-       try{
-        List<ExerciseSessionResponseDTO> allExerciseSession = exerciseSessionService.getAllExerciseSessions();
-        return ResponseEntity.ok(allExerciseSession);
-       }catch(Exception e){
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao encontrar as sessões de exercício");
+    public ResponseEntity<?> getAllExerciseSessions() {
+        try {
+            List<ExerciseSessionResponseDTO> allExerciseSession = exerciseSessionService.getAllExerciseSessions();
+            return ResponseEntity.ok(allExerciseSession);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao encontrar as sessões de exercício");
         }
 
     }
 
     @PostMapping("/createExerciseSession")
-    public ResponseEntity<?> createExerciseSession(@RequestBody ExerciseSessionRequestDTO body){
-        try{
+    public ResponseEntity<?> createExerciseSession(@RequestBody ExerciseSessionRequestDTO body) {
+        try {
             ExerciseSessionEntity newExerciseSession = this.exerciseSessionService.createExerciseSession(body);
             return ResponseEntity.status(HttpStatus.CREATED).body(newExerciseSession);
-        }catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
         }
     }
 
 
     @PutMapping("/updateExerciseSession/{id}")
-    public ResponseEntity<?> updateExerciseSession( 
-        @PathVariable Long id, 
-        @RequestBody ExerciseSessionRequestDTO data) {
+    public ResponseEntity<?> updateExerciseSession(
+            @PathVariable Long id,
+            @RequestBody ExerciseSessionRequestDTO data) {
         try {
             ExerciseSessionEntity updatedSession = exerciseSessionService.updateExerciseSession(id, data);
             return ResponseEntity.ok(updatedSession); //retorna ok com sessão atualizada
-        }catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro interno ao processar a atualização: " + e.getMessage());
         }
@@ -79,14 +79,13 @@ public class ExerciseSessionController {
     }
 
 
-
     @DeleteMapping("/deleteExerciseSession/{exerciseSession_id}")
     public ResponseEntity<?> deleteExerciseSession(
-        @PathVariable Long exerciseSession_id) {
-        try{
+            @PathVariable Long exerciseSession_id) {
+        try {
             exerciseSessionRepository.deleteById(exerciseSession_id);
             return ResponseEntity.ok("Sessão de exercícios deletada com sucesso");
-        }catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar sessão de exercícios");
         }
     }
