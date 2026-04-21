@@ -130,7 +130,6 @@ public class ExerciseSessionService {
         ExerciseSessionEntity session = exerciseSessionRepository.findById(exercisesession_id)
                 .orElseThrow(() -> new RuntimeException("Sessão não encontrada"));
 
-        // Remove a referência no "Pai" para o Hibernate não tentar re-salvar o filho
         WorkoutSessionEntity workout = session.getWorkoutSession();
         if (workout != null) {
             workout.getExerciseSessions().remove(session);
